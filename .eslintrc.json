@@ -7,18 +7,32 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": ["warn", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "ignoreRestSiblings": true
+    }],
     "@typescript-eslint/no-explicit-any": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "no-console": "warn",
+    "no-console": ["warn", {
+      "allow": ["warn", "error"]
+    }],
     "prefer-const": "error",
     "no-var": "error",
     "eqeqeq": ["error", "always"],
-    "curly": "warn",
+    "curly": ["warn", "all"],
     "brace-style": ["error", "1tbs"],
     "@next/next/no-html-link-for-pages": "off",
     "react/no-unescaped-entities": "off",
     "@next/next/no-img-element": "warn"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/components/assessment/**/*.tsx"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ]
 } 
