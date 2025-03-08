@@ -16,6 +16,7 @@
     "no-var": "error",
     "eqeqeq": ["error", "always"],
     "curly": ["error", "all"],
-    "brace-style": ["error", "1tbs"]
+    "brace-style": ["error", "1tbs"],
+    "@next/next/no-html-link-for-pages": "off"
   }
 } 
