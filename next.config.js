@@ -4,8 +4,7 @@ const nextConfig = {
   swcMinify: true,
   transpilePackages: ['framer-motion'],
   experimental: {
-    legacyBrowsers: false,
-    browsersListForSwc: true
+    optimizePackageImports: ['@heroicons/react', 'framer-motion'],
   },
 
   // Image configuration
