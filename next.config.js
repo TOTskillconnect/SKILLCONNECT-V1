@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  transpilePackages: ['framer-motion'],
   experimental: {
     legacyBrowsers: false,
     browsersListForSwc: true
