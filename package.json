@@ -7,10 +7,10 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node node_modules/next/dist/bin/next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "chmod +x ./node_modules/.bin/next"
+    "postinstall": "chmod +x node_modules/next/dist/bin/next"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
