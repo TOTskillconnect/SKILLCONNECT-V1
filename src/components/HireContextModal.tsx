@@ -81,7 +81,7 @@ export function HireContextModal({ isOpen, onClose, onSave, initialContexts = []
               {filteredCategories.map((category) => (
                 <div key={category.id}>
                   <h3 className="text-lg font-medium text-gray-900 mb-3">
-                    {category.label}
+                    {category.title}
                   </h3>
                   <div className="space-y-3">
                     {category.options.map((option) => {
@@ -114,7 +114,7 @@ export function HireContextModal({ isOpen, onClose, onSave, initialContexts = []
                             {isSelected && (
                               <div className="ml-4">
                                 <select
-                                  value={context.priority}
+                                  value={context?.priority || 'required'}
                                   onChange={(e) =>
                                     handlePriorityChange(option.id, e.target.value as Priority)
                                   }

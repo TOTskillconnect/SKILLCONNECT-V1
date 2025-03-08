@@ -1,0 +1,13 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/assessments/page": "app/assessments/page.js",
+  "/assessments/[id]/results/page": "app/assessments/[id]/results/page.js",
+  "/assessments/hub/page": "app/assessments/hub/page.js",
+  "/assessments/[id]/take/page": "app/assessments/[id]/take/page.js",
+  "/candidates/[id]/page": "app/candidates/[id]/page.js",
+  "/pipeline/page": "app/pipeline/page.js",
+  "/page": "app/page.js",
+  "/assessments/behavioral/page": "app/assessments/behavioral/page.js",
+  "/analytics/page": "app/analytics/page.js",
+  "/talent-pool/page": "app/talent-pool/page.js"
+}

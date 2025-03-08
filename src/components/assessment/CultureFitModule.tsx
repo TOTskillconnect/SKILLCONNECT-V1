@@ -33,22 +33,29 @@ const initialProgress: CultureFitProgress = {
 export function CultureFitModule({ candidateId }: CultureFitModuleProps) {
   const [state, setState] = useState<CultureFitState>('selection');
   const [progress, setProgress] = useState<CultureFitProgress>(initialProgress);
+  const [scores, setScores] = useState({ valueSortScore: 0 });
 
   const handleValueSortComplete = (rankings: string[]) => {
-    const valueAlignment = rankings.reduce((acc, valueId, index) => {
-      acc[valueId] = 1 - index / (rankings.length - 1);
-      return acc;
-    }, {} as Record<string, number>);
-
-    setProgress(prev => ({
-      ...prev,
-      completedStages: [...prev.completedStages, 'value-sort'],
-      valueRankings: rankings,
-      profile: {
-        ...prev.profile,
-        valueAlignment
+    const idealOrder = ['innovation', 'excellence', 'customer-focus', 'collaboration', 'integrity'];
+    let score = 0;
+    
+    // Calculate score based on position matches and proximity
+    rankings.forEach((value, index) => {
+      const idealIndex = idealOrder.indexOf(value);
+      const distance = Math.abs(index - idealIndex);
+      
+      if (distance === 0) {
+        score += 20; // Perfect position match
+      } else if (distance === 1) {
+        score += 15; // Off by one position
+      } else if (distance === 2) {
+        score += 10; // Off by two positions
+      } else {
+        score += 5; // More distant position
       }
-    }));
+    });
+
+    setScores(prev => ({ ...prev, valueSortScore: score }));
     setState('visual-quiz');
   };
 

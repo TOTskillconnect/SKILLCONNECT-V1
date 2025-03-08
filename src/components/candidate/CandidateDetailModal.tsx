@@ -87,7 +87,9 @@ const AIInsights = ({ candidate }: { candidate: Candidate }) => {
         },
         {
           name: 'Finance',
-          score: candidate.problemSolvingScore >= 4 ? 85 : 70,
+          score: candidate.technicalSkills.some(skill => 
+            skill.name.toLowerCase().includes('problem') && skill.score >= 4
+          ) ? 85 : 70,
           reason: 'Analytical mindset and attention to detail'
         }
       ]
@@ -102,7 +104,9 @@ const AIInsights = ({ candidate }: { candidate: Candidate }) => {
         },
         {
           name: 'Tech Lead',
-          score: candidate.leadershipPotential >= 4 ? 85 : 70,
+          score: candidate.softSkills.some(skill => 
+            skill.name.toLowerCase().includes('leadership') && skill.score >= 4
+          ) ? 85 : 70,
           reason: 'Shows leadership potential and mentoring capabilities'
         }
       ]
@@ -112,13 +116,29 @@ const AIInsights = ({ candidate }: { candidate: Candidate }) => {
       matches: [
         {
           name: 'Innovation-Driven',
-          score: candidate.culturalValues.includes('Innovation') ? 92 : 75,
+          score: candidate.culturalValues.some(value => 
+            value.name.toLowerCase() === 'innovation' && value.score >= 4
+          ) ? 92 : 75,
           reason: 'Demonstrates creative problem-solving approach'
         },
         {
           name: 'Collaborative',
-          score: candidate.collaborationScore >= 4 ? 90 : 75,
+          score: candidate.culturalValues.some(value => 
+            value.name.toLowerCase() === 'collaboration' && value.score >= 4
+          ) ? 90 : 75,
           reason: 'Strong team player with excellent communication'
+        }
+      ]
+    },
+    culturalValues: {
+      title: 'Cultural Values',
+      matches: [
+        {
+          name: 'Team Player',
+          score: candidate.culturalValues.some(value => 
+            value.name.toLowerCase().includes('collaboration') && value.score >= 4
+          ) ? 90 : 75,
+          reason: 'Strong emphasis on collaboration and team success'
         }
       ]
     }
@@ -160,6 +180,7 @@ const AIInsights = ({ candidate }: { candidate: Candidate }) => {
         {renderInsightSection('Industry Fit', insights.industry.matches)}
         {renderInsightSection('Role Alignment', insights.role.matches)}
         {renderInsightSection('Cultural Fit', insights.culture.matches)}
+        {renderInsightSection('Cultural Values', insights.culturalValues.matches)}
       </div>
     </div>
   );

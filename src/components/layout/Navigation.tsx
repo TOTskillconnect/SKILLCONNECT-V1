@@ -21,7 +21,7 @@ export function Navigation() {
                 Analytics
               </Link>
               <Link
-                href="/"
+                href="/talent-pool"
                 className="border-accent-secondary text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
                 Talent Pool

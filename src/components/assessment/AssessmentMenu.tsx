@@ -10,19 +10,17 @@ interface AssessmentMenuProps {
 }
 
 const assessmentTypeLabels: Record<AssessmentType, string> = {
-  technical: 'Technical Assessment',
+  'job-knowledge': 'Job Knowledge Assessment',
+  behavioral: 'Behavioral Assessment',
   roleplay: 'Role-Play Scenario',
-  sjt: 'Situational Judgment',
-  personality: 'Personality Assessment',
-  collaboration: 'Collaboration Exercise'
+  situational: 'Situational Judgment'
 };
 
 const assessmentTypeDescriptions: Record<AssessmentType, string> = {
-  technical: 'Evaluate technical skills and problem-solving abilities',
+  'job-knowledge': 'Evaluate technical skills and job-specific knowledge',
+  behavioral: 'Assess behavioral traits and work style',
   roleplay: 'Assess communication and stakeholder management skills',
-  sjt: 'Test decision-making in real-world scenarios',
-  personality: 'Understand work style and cultural fit',
-  collaboration: 'Evaluate teamwork and pair programming capabilities'
+  situational: 'Test decision-making in real-world scenarios'
 };
 
 export const AssessmentMenu: React.FC<AssessmentMenuProps> = ({
@@ -111,7 +109,7 @@ export const AssessmentMenu: React.FC<AssessmentMenuProps> = ({
                 </div>
                 <div className="flex items-center gap-1">
                   <DocumentTextIcon className="w-4 h-4" />
-                  {template.questionCount} questions
+                  {template.questions.length} questions
                 </div>
               </div>
             </div>

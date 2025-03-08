@@ -4,6 +4,45 @@ import { useState } from 'react';
 import { ValueSortChallenge } from '@/components/assessment/culture-fit/ValueSortChallenge';
 import { TeamDynamicsSimulation } from '@/components/assessment/behavioral/TeamDynamicsSimulation';
 import { DecisionMakingScenario } from '@/components/assessment/behavioral/DecisionMakingScenario';
+import { CompanyValue } from '@/types/cultureFit';
+
+const companyValues: CompanyValue[] = [
+  {
+    id: 'innovation',
+    title: 'Innovation',
+    description: 'Continuously seeking new and better ways to solve problems',
+    icon: '🚀',
+    behaviors: ['Proposes creative solutions', 'Embraces change', 'Experiments with new approaches']
+  },
+  {
+    id: 'collaboration',
+    title: 'Collaboration',
+    description: 'Working together effectively to achieve shared goals',
+    icon: '🤝',
+    behaviors: ['Communicates effectively', 'Supports team members', 'Shares knowledge']
+  },
+  {
+    id: 'excellence',
+    title: 'Excellence',
+    description: 'Striving for the highest quality in everything we do',
+    icon: '⭐',
+    behaviors: ['Sets high standards', 'Delivers quality work', 'Continuously improves']
+  },
+  {
+    id: 'integrity',
+    title: 'Integrity',
+    description: 'Being honest, ethical, and transparent in all actions',
+    icon: '🎯',
+    behaviors: ['Acts ethically', 'Shows transparency', 'Takes responsibility']
+  },
+  {
+    id: 'customer-focus',
+    title: 'Customer Focus',
+    description: 'Putting customers at the center of every decision',
+    icon: '👥',
+    behaviors: ['Understands customer needs', 'Provides excellent service', 'Seeks feedback']
+  }
+];
 
 interface BehavioralModuleProps {
   candidateId: string;
@@ -20,10 +59,29 @@ export function BehavioralModule({ candidateId, role }: BehavioralModuleProps) {
     decisionMaking: 0
   });
 
-  const handleStageComplete = (stageName: keyof typeof scores, score: number) => {
+  const handleStageComplete = (stageName: keyof typeof scores, score: number | string[]) => {
+    let numericScore: number;
+    
+    if (stageName === 'values' && Array.isArray(score)) {
+      // Calculate score based on the order of values
+      // Perfect order gets 100 points, deduct points for each position difference
+      const idealOrder = ['innovation', 'excellence', 'customer-focus', 'collaboration', 'integrity'];
+      numericScore = score.reduce((total, value, index) => {
+        const idealIndex = idealOrder.indexOf(value);
+        const positionDifference = Math.abs(index - idealIndex);
+        // Deduct 10 points for each position difference
+        return total - (positionDifference * 10);
+      }, 100);
+      
+      // Ensure score is between 0 and 100
+      numericScore = Math.max(0, Math.min(100, numericScore));
+    } else {
+      numericScore = score as number;
+    }
+
     setScores(prev => ({
       ...prev,
-      [stageName]: score
+      [stageName]: numericScore
     }));
 
     // Progress to next stage
@@ -103,6 +161,7 @@ export function BehavioralModule({ candidateId, role }: BehavioralModuleProps) {
     <div className="space-y-6">
       {stage === 'values' && (
         <ValueSortChallenge
+          values={companyValues}
           onComplete={(score) => handleStageComplete('values', score)}
         />
       )}

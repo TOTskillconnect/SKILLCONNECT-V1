@@ -191,7 +191,7 @@ export const HireContextModal: React.FC<HireContextModalProps> = ({ isOpen, onCl
                                           </span>
                                           {isSelected && (
                                             <select
-                                              value={context.priority}
+                                              value={context?.priority || 'required'}
                                               onChange={(e) => handlePriorityChange(option.id, e.target.value as 'required' | 'preferred' | 'bonus')}
                                               className="ml-4 text-sm border-gray-200 rounded-md focus:ring-[#880E4F] focus:border-[#880E4F] bg-white transition-colors"
                                             >

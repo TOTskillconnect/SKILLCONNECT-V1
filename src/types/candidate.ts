@@ -15,7 +15,11 @@ export interface CulturalValue {
 
 export interface Assessment {
   id: string;
+  title: string;
   status: 'pending' | 'in_progress' | 'completed';
+  score?: number;
+  feedback?: string;
+  completedAt?: string;
 }
 
 export interface HireContextPreference {
@@ -43,4 +47,5 @@ export interface Candidate {
   stage?: 'shortlisted' | 'screening' | 'validating' | 'interview' | 'offer';
   profileImage?: string;
   assessments?: Assessment[];
+  availability?: boolean;
 } 

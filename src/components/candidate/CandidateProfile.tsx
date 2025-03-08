@@ -116,7 +116,7 @@ export function CandidateProfile({ candidate }: CandidateProfileProps) {
               </div>
               <div className="flex items-center gap-2 text-gray-600">
                 <BriefcaseIcon className="w-5 h-5" />
-                <span>{candidate.experience} years experience</span>
+                <span>{candidate.yearsOfExperience} years experience</span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">
                 <EnvelopeIcon className="w-5 h-5" />
@@ -137,59 +137,122 @@ export function CandidateProfile({ candidate }: CandidateProfileProps) {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Skills & Expertise</h2>
             
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Technical Skills</h3>
-                <div className="space-y-3">
-                  {candidate.technicalSkills.map(skill => (
-                    <SkillRating key={skill.name} name={skill.name} rating={skill.rating} />
-                  ))}
-                </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-[#714b67]">Technical Skills</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {candidate.technicalSkills.map((skill) => (
+                  <SkillBadge key={skill.name} name={skill.name} rating={skill.score} />
+                ))}
               </div>
+            </div>
 
-              <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Soft Skills</h3>
-                <div className="space-y-3">
-                  {candidate.softSkills.map(skill => (
-                    <SkillRating key={skill.name} name={skill.name} rating={skill.rating} />
-                  ))}
-                </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-[#714b67]">Soft Skills</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {candidate.softSkills.map((skill) => (
+                  <SkillBadge key={skill.name} name={skill.name} rating={skill.score} />
+                ))}
               </div>
             </div>
           </div>
 
           {/* Assessments */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Assessment History</h2>
-            
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-[#714b67]">Assessment History</h3>
             <div className="space-y-4">
-              {candidate.assessments.map(assessment => (
-                <div key={assessment.id} className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <AcademicCapIcon className="w-5 h-5 text-gray-600" />
-                      <h3 className="font-medium text-gray-900">{assessment.title}</h3>
+              {candidate.assessments?.map((assessment) => (
+                <div key={assessment.id} className="bg-white rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium text-gray-900">{assessment.title}</h4>
+                    <span className={`px-2 py-1 text-sm rounded-full ${
+                      assessment.status === 'completed' ? 'bg-green-100 text-green-800' :
+                      assessment.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {assessment.status.replace('_', ' ')}
+                    </span>
+                  </div>
+                  {assessment.feedback && (
+                    <p className="text-sm text-gray-600 mb-2">{assessment.feedback}</p>
+                  )}
+                  {assessment.score !== undefined && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-700">Score:</span>
+                      <span className="text-sm text-gray-900">{assessment.score}%</span>
                     </div>
-                    {assessment.feedback && (
-                      <p className="text-sm text-gray-600 mt-2">{assessment.feedback}</p>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <AssessmentStatus status={assessment.status} />
-                    {assessment.score && (
-                      <span className="text-sm font-medium text-gray-900">
-                        Score: {assessment.score}%
-                      </span>
-                    )}
-                    {assessment.completedAt && (
-                      <div className="flex items-center gap-1 text-xs text-gray-500">
-                        <ClockIcon className="w-4 h-4" />
-                        {new Date(assessment.completedAt).toLocaleDateString()}
-                      </div>
-                    )}
-                  </div>
+                  )}
+                  {assessment.completedAt && (
+                    <div className="text-xs text-gray-500 mt-2">
+                      Completed on {new Date(assessment.completedAt).toLocaleDateString()}
+                    </div>
+                  )}
                 </div>
               ))}
+              {(!candidate.assessments || candidate.assessments.length === 0) && (
+                <p className="text-sm text-gray-500">No assessments completed yet.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Cultural Values */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-[#714b67]">Cultural Values</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {candidate.culturalValues.map((value) => (
+                <SkillBadge key={value.name} name={value.name} rating={value.score} />
+              ))}
+            </div>
+          </div>
+
+          {/* Fit Scores */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-[#714b67]">Fit Analysis</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <h4 className="font-medium text-gray-900 mb-2">Overall Fit</h4>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-[#714b67]">
+                    {Math.round(
+                      ((candidate.technicalSkills?.reduce((sum, skill) => sum + skill.score, 0) || 0) +
+                      (candidate.softSkills?.reduce((sum, skill) => sum + skill.score, 0) || 0)) /
+                      ((candidate.technicalSkills?.length || 0) + (candidate.softSkills?.length || 0)) * 20
+                    )}%
+                  </span>
+                </div>
+              </div>
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <h4 className="font-medium text-gray-900 mb-2">Leadership</h4>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-[#714b67]">
+                    {Math.round(
+                      ((candidate.behavioralTraits?.find(trait => 
+                        trait.name.toLowerCase().includes('leadership'))?.score || 0) * 20)
+                    )}%
+                  </span>
+                </div>
+              </div>
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <h4 className="font-medium text-gray-900 mb-2">Problem Solving</h4>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-[#714b67]">
+                    {Math.round(
+                      ((candidate.behavioralTraits?.find(trait => 
+                        trait.name.toLowerCase().includes('problem'))?.score || 0) * 20)
+                    )}%
+                  </span>
+                </div>
+              </div>
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <h4 className="font-medium text-gray-900 mb-2">Collaboration</h4>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-[#714b67]">
+                    {Math.round(
+                      ((candidate.behavioralTraits?.find(trait => 
+                        trait.name.toLowerCase().includes('collaboration'))?.score || 0) * 20)
+                    )}%
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -200,28 +263,31 @@ export function CandidateProfile({ candidate }: CandidateProfileProps) {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Overall Fit</h2>
             <div className="flex items-center justify-between mb-6">
-              <div className="text-4xl font-bold text-accent">{candidate.overallFitScore}%</div>
+              <div className="text-4xl font-bold text-accent">
+                {Math.round(
+                  ((candidate.technicalSkills?.reduce((sum, skill) => sum + skill.score, 0) || 0) +
+                  (candidate.softSkills?.reduce((sum, skill) => sum + skill.score, 0) || 0)) /
+                  ((candidate.technicalSkills?.length || 0) + (candidate.softSkills?.length || 0)) * 20
+                )}%
+              </div>
               <ChartBarIcon className="w-8 h-8 text-accent" />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <ScoreIndicator score={candidate.leadershipPotential} label="Leadership" />
-              <ScoreIndicator score={candidate.problemSolvingScore} label="Problem Solving" />
-              <ScoreIndicator score={candidate.collaborationScore} label="Collaboration" />
-            </div>
-          </div>
-
-          {/* Cultural Values */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Cultural Values</h2>
-            <div className="flex flex-wrap gap-2">
-              {candidate.culturalValues.map(value => (
-                <span
-                  key={value}
-                  className="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium"
-                >
-                  {value}
-                </span>
-              ))}
+              <ScoreIndicator 
+                score={Math.round((candidate.behavioralTraits?.find(trait => 
+                  trait.name.toLowerCase().includes('leadership'))?.score || 0) * 20)} 
+                label="Leadership" 
+              />
+              <ScoreIndicator 
+                score={Math.round((candidate.behavioralTraits?.find(trait => 
+                  trait.name.toLowerCase().includes('problem'))?.score || 0) * 20)} 
+                label="Problem Solving" 
+              />
+              <ScoreIndicator 
+                score={Math.round((candidate.behavioralTraits?.find(trait => 
+                  trait.name.toLowerCase().includes('collaboration'))?.score || 0) * 20)} 
+                label="Collaboration" 
+              />
             </div>
           </div>
 

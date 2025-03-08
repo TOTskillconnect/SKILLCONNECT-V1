@@ -29,7 +29,11 @@ export function TeamDynamicsSimulation({ simulation, onComplete }: TeamDynamicsS
     const option = currentStage.options.find(o => o.id === optionId);
     if (option) {
       const impact = option.impact;
-      const primaryStrength = Object.entries(impact).reduce((a, b) => impact[a] > impact[b] ? a : b)[0];
+      type ImpactKey = keyof typeof impact;
+      const entries = Object.entries(impact) as [ImpactKey, number][];
+      const primaryStrength = entries.reduce<[ImpactKey, number]>((a, b) => 
+        impact[a[0]] > impact[b[0]] ? a : b, entries[0]
+      )[0];
       setFeedback(`This approach demonstrates strong ${primaryStrength} skills.`);
     }
   };

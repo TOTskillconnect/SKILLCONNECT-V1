@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortableItem } from './SortableItem';
+import { CompanyValue } from '@/types/cultureFit';
 
 interface ValueSortChallengeProps {
-  onComplete: (score: number) => void;
+  values: CompanyValue[];
+  onComplete: (rankings: string[]) => void;
 }
 
 const companyValues = [
@@ -39,8 +41,8 @@ const companyValues = [
 
 const idealOrder = ['innovation', 'excellence', 'customer-focus', 'collaboration', 'integrity'];
 
-export function ValueSortChallenge({ onComplete }: ValueSortChallengeProps) {
-  const [items, setItems] = useState(companyValues);
+export function ValueSortChallenge({ values, onComplete }: ValueSortChallengeProps) {
+  const [items, setItems] = useState(values.map(v => v.id));
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const sensors = useSensors(
@@ -55,76 +57,61 @@ export function ValueSortChallenge({ onComplete }: ValueSortChallengeProps) {
 
     if (active.id !== over.id) {
       setItems((items) => {
-        const oldIndex = items.findIndex(item => item.id === active.id);
-        const newIndex = items.findIndex(item => item.id === over.id);
+        const oldIndex = items.indexOf(active.id);
+        const newIndex = items.indexOf(over.id);
         return arrayMove(items, oldIndex, newIndex);
       });
     }
   };
 
   const handleSubmit = () => {
-    const currentOrder = items.map(item => item.id);
-    let score = 0;
-    
-    // Calculate score based on position matches and proximity
-    currentOrder.forEach((value, index) => {
-      const idealIndex = idealOrder.indexOf(value);
-      const distance = Math.abs(index - idealIndex);
-      
-      if (distance === 0) {
-        score += 20; // Perfect position match
-      } else if (distance === 1) {
-        score += 15; // Off by one position
-      } else if (distance === 2) {
-        score += 10; // Off by two positions
-      } else {
-        score += 5; // More distant position
-      }
-    });
-
     setIsSubmitted(true);
-    onComplete(score);
+    onComplete(items);
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl p-6 shadow-sm">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Value Alignment Assessment</h2>
-        <p className="text-gray-600 mb-6">
-          Arrange these company values in order of importance, based on your understanding of our organization's culture.
-          Drag and drop the values to reorder them.
-        </p>
+    <div className="p-6">
+      <h2 className="text-2xl font-semibold text-[#714b67] mb-4">
+        Sort Company Values by Importance
+      </h2>
+      <p className="text-[#714b67]/70 mb-6">
+        Drag and drop the values to rank them from most important (top) to least important (bottom).
+      </p>
 
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={items}
-            strategy={verticalListSortingStrategy}
-          >
-            <div className="space-y-3">
-              {items.map((item) => (
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={items} strategy={verticalListSortingStrategy}>
+          <div className="space-y-3">
+            {items.map((id) => {
+              const value = values.find(v => v.id === id)!;
+              return (
                 <SortableItem
-                  key={item.id}
-                  id={item.id}
-                  value={item.value}
-                  description={item.description}
+                  key={id}
+                  id={id}
+                  value={value.title}
+                  description={value.description}
                 />
-              ))}
-            </div>
-          </SortableContext>
-        </DndContext>
+              );
+            })}
+          </div>
+        </SortableContext>
+      </DndContext>
 
-        {!isSubmitted && (
-          <button
-            onClick={handleSubmit}
-            className="mt-6 w-full py-2 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors"
-          >
-            Submit Order
-          </button>
-        )}
+      <div className="mt-6">
+        <button
+          onClick={handleSubmit}
+          disabled={isSubmitted}
+          className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+            isSubmitted
+              ? 'bg-[#714b67]/50 text-white cursor-not-allowed'
+              : 'bg-[#714b67] text-white hover:bg-[#714b67]/90'
+          }`}
+        >
+          {isSubmitted ? 'Submitted' : 'Submit Ranking'}
+        </button>
       </div>
     </div>
   );

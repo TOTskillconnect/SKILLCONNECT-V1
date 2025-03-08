@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import { mockCandidates } from '@/data/mockCandidates';
 import { Candidate } from '@/types/candidate';
@@ -6,7 +7,7 @@ import { PipelineColumn } from '@/components/pipeline/PipelineColumn';
 
 type Stage = 'shortlisted' | 'screening' | 'validating' | 'interview' | 'offer';
 
-interface PipelineColumn {
+interface PipelineColumnType {
   id: Stage;
   title: string;
   candidates: Candidate[];
@@ -14,7 +15,7 @@ interface PipelineColumn {
 
 export default function PipelinePage() {
   // Initialize pipeline columns with candidates from mock data
-  const [columns, setColumns] = useState<PipelineColumn[]>([
+  const [columns, setColumns] = useState<PipelineColumnType[]>([
     {
       id: 'shortlisted',
       title: 'Shortlisted',
