@@ -2,6 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    legacyBrowsers: false,
+    browsersListForSwc: true
+  },
 
   // Image configuration
   images: {
