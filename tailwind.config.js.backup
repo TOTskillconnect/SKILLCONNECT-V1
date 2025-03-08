@@ -1,0 +1,36 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        accent: {
+          DEFAULT: '#FF4100',
+          secondary: '#1D2939',
+        },
+        primary: {
+          text: '#1D2939',
+          DEFAULT: '#FF4100',
+        },
+        secondary: {
+          text: '#1D2939',
+          DEFAULT: '#1D2939',
+        },
+        background: '#EEF5FF',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '112': '28rem',
+        '128': '32rem',
+      },
+      gridTemplateColumns: {
+        'cards': 'repeat(auto-fill, minmax(320px, 1fr))',
+      },
+    },
+  },
+  plugins: [],
+}; 

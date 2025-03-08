@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Node {
   id: string;
@@ -77,7 +78,7 @@ export function CircuitPuzzle({ onComplete }: CircuitPuzzleProps) {
   };
 
   return (
-    <div className="relative w-full h-[400px] bg-form-background rounded-xl p-8">
+    <div className="relative w-full h-[400px] bg-gray-900 rounded-xl p-8">
       {/* Grid Background */}
       <div className="absolute inset-0 opacity-10">
         <svg className="w-full h-full">
@@ -92,18 +93,21 @@ export function CircuitPuzzle({ onComplete }: CircuitPuzzleProps) {
       <div className="relative z-10">
         <svg className="w-full h-full">
           {/* Connections */}
-          {connections.map((conn) => {
+          {connections.map((conn, index) => {
             const fromNode = nodes.find(n => n.id === conn.from);
             const toNode = nodes.find(n => n.id === conn.to);
             if (!fromNode || !toNode) return null;
+
             return (
-              <line
+              <motion.line
                 key={`${conn.from}-${conn.to}`}
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
                 x1={`${fromNode.x}%`}
                 y1={`${fromNode.y}%`}
                 x2={`${toNode.x}%`}
                 y2={`${toNode.y}%`}
-                stroke={conn.isValid ? 'var(--success)' : 'var(--error)'}
+                stroke={conn.isValid ? '#22c55e' : '#ef4444'}
                 strokeWidth="2"
                 className="transition-colors duration-300"
               />
@@ -112,46 +116,52 @@ export function CircuitPuzzle({ onComplete }: CircuitPuzzleProps) {
 
           {/* Selected Node Connection Preview */}
           {selectedNode && (
-            <line
+            <motion.line
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               x1={`${nodes.find(n => n.id === selectedNode)?.x}%`}
               y1={`${nodes.find(n => n.id === selectedNode)?.y}%`}
               x2="50%"
               y2="50%"
-              stroke="var(--accent)"
+              stroke="#60a5fa"
               strokeWidth="2"
               strokeDasharray="4"
               className="transition-all duration-100"
+              style={{
+                cursor: 'none'
+              }}
             />
           )}
         </svg>
 
         {/* Node Elements */}
         {nodes.map(node => (
-          <button
+          <motion.button
             key={node.id}
             onClick={() => handleNodeClick(node.id)}
             className={`absolute transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full 
-              ${node.isActive ? 'bg-success' : 'bg-form-background'} 
-              ${selectedNode === node.id ? 'ring-4 ring-accent' : ''} 
-              hover:ring-2 hover:ring-accent/50 transition-all duration-200`}
+              ${node.isActive ? 'bg-emerald-500' : 'bg-gray-600'} 
+              ${selectedNode === node.id ? 'ring-4 ring-blue-500' : ''} 
+              hover:ring-2 hover:ring-blue-400 transition-all duration-200`}
             style={{
               left: `${node.x}%`,
               top: `${node.y}%`
             }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <span className="sr-only">{`${node.type} node`}</span>
+            <span className="sr-only">{node.type} node</span>
             <div className={`absolute -top-6 left-1/2 transform -translate-x-1/2 
-              text-xs font-medium ${node.isActive ? 'text-success' : 'text-secondary-text'}`}
-            >
+              text-xs font-medium ${node.isActive ? 'text-emerald-400' : 'text-gray-400'}`}>
               {node.type}
             </div>
-          </button>
+          </motion.button>
         ))}
       </div>
 
       {/* Instructions */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
-        text-center text-secondary-text text-sm bg-form-background/80 px-4 py-2 rounded-lg">
+        text-center text-gray-400 text-sm bg-gray-800/80 px-4 py-2 rounded-lg">
         Click nodes to create connections. Complete the circuit to proceed.
       </div>
     </div>

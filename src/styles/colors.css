@@ -1,0 +1,11 @@
+:root {
+  --primary-color: #4A148C; /* Deep Purple for headings, navigation */
+  --accent-color: #FF6F61; /* Coral for call-to-action buttons */
+  --background-color: #FFF3E0; /* Soft Peach for main background */
+  --tag-color: #A5D6A7; /* Muted Sage Green for hiring context tags */
+  --form-background: #F5F5F5; /* Light Gray for input fields */
+  --button-color: #B71C1C; /* Deep Red for primary action buttons */
+  --button-gradient-start: #880E4F; /* Maroon Start */
+  --button-gradient-end: #C2185B; /* Maroon End */
+  --border-color: #8D6E63; /* Dark Taupe for form borders */
+} 

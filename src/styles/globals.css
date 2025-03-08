@@ -1,0 +1,39 @@
+@import './colors.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles */
+body {
+  background-color: var(--background-color);
+  color: var(--primary-color);
+}
+
+/* Form styles */
+input, select, textarea {
+  background-color: var(--form-background);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(to right, var(--button-gradient-start), var(--button-gradient-end));
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Tag styles */
+.tag {
+  background-color: var(--tag-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+} 
